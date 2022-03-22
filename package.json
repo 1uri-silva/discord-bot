@@ -4,7 +4,6 @@
 	"main": "index.js",
 	"license": "MIT",
 	"dependencies": {
-		"cron": "^1.8.2",
 		"cross-fetch": "^3.1.5",
 		"discord.js": "^13.6.0",
 		"dotenv": "^16.0.0"

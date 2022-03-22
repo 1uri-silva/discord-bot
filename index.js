@@ -2,8 +2,7 @@ const fs = require("fs");
 
 const { Client, Intents } = require("discord.js");
 const { fetch } = require("cross-fetch");
-const { config } = require("dotenv");
-const cron = require("cron");
+const { config } = require('dotenv');
 
 config();
 
@@ -13,28 +12,38 @@ const client = new Client({
 
 client.login(process.env.TOKEN);
 
-client.on("ready", () => {
-	console.log("Estou online");
+client.on('ready', () => {
+	console.log('Estou online');
 	const writeFile = async () => {
-		console.log("Estou executando?");
-
 		const channel = client.channels.cache.get(String(process.env.TESTSERVER));
 		const length = process.argv.length;
-		const uriInstaUser = process.argv[length - 1];
+		const urlRequest = process.argv[length - 1];
 
-		const urlRequest = `https://randomuser.me/api/?results=${uriInstaUser}`;
 		const response = await fetch(urlRequest);
-		const dataInsta = await response.json();
+		const status = response.status;
+		const dataJson = await response.json();
 
-		const insta = dataInsta.results[0].login;
+		let dataStaved;
 
-		const data = JSON.stringify(insta, null, 2);
+		if (status === 200 || status === 201) {
+			dataStaved = {
+				status,
+				data: dataJson,
+			};
+		} else {
+			dataStaved = {
+				status,
+				data: `API retornou uma resposta com o seguinte status: ${status}`,
+			};
+		}
+
+		const data = JSON.stringify(dataStaved, null, 2);
 
 		const output = fs.createWriteStream(`${Math.random().toFixed(2)}.json`);
-		fs.writeFile(output.path, data, { encoding: "utf-8" }, async () => {
+		fs.writeFile(output.path, data, { encoding: 'utf-8' }, async () => {
 			try {
 				const sending = await channel.send({
-					content: "@everyone",
+					content: '@everyone',
 					files: [output.path],
 				});
 
@@ -47,5 +56,5 @@ client.on("ready", () => {
 
 	setInterval(() => {
 		writeFile();
-	}, 9000);
+	}, process.env.TIMEMS);
 });
