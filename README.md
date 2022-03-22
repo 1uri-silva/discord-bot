@@ -11,7 +11,9 @@
 
 - Exclui o arquivo
 
-- Time de execução 10800s (second) -> 180min (minute) -> 3h (hour)
+- Time de execução 10800000ms (millisecond) -> (10800s (second) -> 180min (minute) -> 3h (hour)
+
+![screen](screen/screen-shot.png)
 
 ## 🚀 Instalando discord-bot
 
